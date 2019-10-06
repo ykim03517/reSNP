@@ -1,0 +1,20 @@
+Package: reSNP
+Title: An efficient integrative resampling method for gene-trait association analysis
+Version: 0.0.0.9000
+Date: 2019-09-06
+Authors@R: 
+    person(given = "Yeonil",
+           family = "Kim",
+           role = c("aut", "cre"),
+           email = "yeonil.kim@merck.com")
+Description: This package provides test results for association analysis between a genotyped SNP and complex traits when the underlying genetic model is unknown. An integrative association test procedure under a generalized linear model framework to flexibly model the data from the above three common genetic models (recessivie, additive, dominant) and beyond. A computationally efficient resampling procedure is adopted to compute p-values, and score-statistics based bootstrapping is used to obtain the confidence interval of estimated genetic model.   
+License: GPL-3
+Encoding: UTF-8
+Depends: R (>= 2.13.0)
+LazyData: true
+RoxygenNote: 6.1.1
+LinkingTo: 
+    Rcpp, RcppEigen
+Imports: 
+     Rcpp, RcppEigen, RcppZiggurat, lmtest, mvtnorm
+Maintainer: Yeonil Kim <yeonil.kim@ufl.edu>
