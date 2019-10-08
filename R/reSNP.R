@@ -24,8 +24,8 @@
 ##' @importFrom Rcpp sourceCpp
 ##' @export
 
-reSNP <- function(data, grid = 0.01, R = 10^4, testStat = "score", out_type = "D", boot = FALSE, boot_Num = NULL, 
-    method_se = NULL, alpha_CI = NULL) {
+reSNP <- function(data, grid = 0.01, R = 10^4, testStat = "score", out_type = "D", boot = FALSE, boot_Num = NULL,
+method_se = NULL, alpha_CI = NULL) {
     
     # read data
     y = data[[1]]
@@ -87,29 +87,23 @@ reSNP <- function(data, grid = 0.01, R = 10^4, testStat = "score", out_type = "D
     cum.W = ecdf(W.star)
     pval = 1 - cum.W(T_stat)
     
-    # Odds ratio
     
-    CI <- function(est, std) {
-        ans = round(exp(c(est - 1.96 * std, est + 1.96 * std)), 2)
-        return(ans)
-    }
-    
-    lm_est_gmodel = glm(y ~ g_seqC[, est], family = "binomial")
-    est = summary(lm_est_gmodel)$coeff[2, 1]
-    std = summary(lm_est_gmodel)$coeff[2, 2]
-    CI_OR = round(exp(c(est - 1.96 * std, est + 1.96 * std)), 2)
+    lm_est_gmodel = glm(y ~ geno_grid[, est], family = "binomial")
+    est_geno = summary(lm_est_gmodel)$coeff[2, 1]
+    std_geno = summary(lm_est_gmodel)$coeff[2, 2]
+    CI_OR = round(exp(c(est_geno - 1.96 * std_geno, est_geno + 1.96 * std_geno)), 2)
     names(CI_OR) = c("2.5%", "97.5%")
     
-    OR_est_gmodel = exp(summary(lm_est_gmodel)$coeff[2, 1])
+    OR_est_gmodel = exp(est_geno)
     
     if (!isFALSE(boot)) {
         
-        out = CI_scoreBoot(data, U_V, boot_Num = boot_Num, method_se = method_se, alpha_CI = alpha_CI, 
-            grid = grid)
+        out = CI_scoreBoot(data, U_V, boot_Num = boot_Num, method_se = method_se, alpha_CI = alpha_CI,
+        grid = grid)
         
         NOTE <- "odds ratio, p.value, estmated genetic model & confidence interval by bootstrap"
-        structure(list(OR = OR_est_gmodel, CI_OR = CI_OR, p.value = pval, est_gene_model = out$est, CI_gene_model = out$CI, 
-            method = out$method_se, note = NOTE))
+        structure(list(OR = OR_est_gmodel, CI_OR = CI_OR, p.value = pval, est_gene_model = out$est, CI_gene_model = out$CI,
+        method = out$method_se, note = NOTE))
         
     } else {
         
