@@ -1,6 +1,9 @@
 ## reSNP
 Github repository for robust and efficient single SNP association analysis 
 
+## Citation
+An efficient integrative resampling method for gene-trait association analysis. Yeonil Kim, Yueh-Yun Chi, Fei Zou. (2019+, under minor revision).
+
 ## Install This Package from github
 
 ```{r}
