@@ -24,8 +24,8 @@
 ##' @importFrom Rcpp sourceCpp
 ##' @export
 
-reSNP <- function(data, grid = 0.01, R = 10^4, testStat = "score", out_type = "D", boot = FALSE, boot_Num = NULL,
-method_se = NULL, alpha_CI = NULL) {
+reSNP <- function(data, grid = 0.01, R = 10^4, testStat = "score", out_type = "D", boot = FALSE, boot_Num = NULL, 
+    method_se = NULL, alpha_CI = NULL) {
     
     # read data
     y = data[[1]]
@@ -63,13 +63,13 @@ method_se = NULL, alpha_CI = NULL) {
         }
         
         T_stat = max(LRT)
-        est = seqC[which.max(LRT)]
+        est.loc = which.max(LRT)
         
     } else if (testStat == "score") {
         
         score_vec = colSums(U_V[[1]])^2/U_V[[2]]
         T_stat = max(score_vec)
-        est = seqC[which.max(score_vec)]
+        est.loc = which.max(score_vec)
         
     }
     
@@ -88,7 +88,7 @@ method_se = NULL, alpha_CI = NULL) {
     pval = 1 - cum.W(T_stat)
     
     
-    lm_est_gmodel = glm(y ~ geno_grid[, est], family = "binomial")
+    lm_est_gmodel = glm(y ~ geno_grid[, est.loc], family = "binomial")
     est_geno = summary(lm_est_gmodel)$coeff[2, 1]
     std_geno = summary(lm_est_gmodel)$coeff[2, 2]
     CI_OR = round(exp(c(est_geno - 1.96 * std_geno, est_geno + 1.96 * std_geno)), 2)
@@ -98,12 +98,12 @@ method_se = NULL, alpha_CI = NULL) {
     
     if (!isFALSE(boot)) {
         
-        out = CI_scoreBoot(data, U_V, boot_Num = boot_Num, method_se = method_se, alpha_CI = alpha_CI,
-        grid = grid)
+        out = CI_scoreBoot(data, U_V, boot_Num = boot_Num, method_se = method_se, alpha_CI = alpha_CI, 
+            grid = grid)
         
         NOTE <- "odds ratio, p.value, estmated genetic model & confidence interval by bootstrap"
-        structure(list(OR = OR_est_gmodel, CI_OR = CI_OR, p.value = pval, est_gene_model = out$est, CI_gene_model = out$CI,
-        method = out$method_se, note = NOTE))
+        structure(list(OR = OR_est_gmodel, CI_OR = CI_OR, p.value = pval, est_gene_model = out$est, CI_gene_model = out$CI, 
+            method = out$method_se, note = NOTE))
         
     } else {
         
