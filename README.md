@@ -25,7 +25,7 @@ set.seed(0901)
 ## When recessive genetic model is true
 gmodel=0
 rec=singleSNP(n, geno_eff=eff, c=gmodel, MAF=alleleF)
-ans_standard=reSNP(rec, boot=TRUE, boot_Num=num, method_se="standard", alpha_CI=sig)   # standard method (please refer to the document of "reSNP" function by ?reSNP)
+ans_standard=reSNP(rec, boot=TRUE, boot_Num=num, method_se="standard", alpha_CI=sig)   
 
 ## When additve genetic model is true
 gmodel=0.5
@@ -36,5 +36,7 @@ ans_BC=reSNP(add, boot=TRUE, boot_Num=num, method_se="BC", alpha_CI=sig)        
 gmodel=1
 dom=singleSNP(n, geno_eff=eff, c=gmodel, MAF=alleleF)
 ans_pct=reSNP(dom, boot=TRUE, boot_Num=num, method_se="percentile", alpha_CI=sig)      # percentile method 
+
+## Please refer to the document of "reSNP" function by ?reSNP for details of method_se.
 
 ```
